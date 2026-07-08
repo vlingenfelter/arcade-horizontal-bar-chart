@@ -3,7 +3,7 @@
 ### Overview
 
 
-### How it works
+### How the code works
 
 ```
 // This generates the little color patch for adding labels to a legend for the bar chart
@@ -13,8 +13,6 @@ function makePatch(color) {
   return div
 }
 
-```
-```
 
 // This generates the chunk of color for the bar in the bar chart
 // String: Hex color code, String: width (in percentage) -> String: HTML
@@ -23,14 +21,39 @@ function makeBarChunk(color, width) {
   return td
 }
 
-```
-```
+// This is a helper function that can convert an array of whole numbers into decimals
+// Only necessary if your data is in whole numbers (which it likely is)
+// Array: array of ints -> Array: array of floats (decimals that sum to 1)
+function convertArrayToDecimal(array) {
+	var decimalArray = []
+	var denominator = Sum(array)
+
+	for (var i in array) {
+    var decimal = array[i]/denominator
+		decimalArray[i] = decimal
+	}
+
+	return decimalArray
+}
+
+
 // This generates the html table that makes the bar chart visual
-// Input Array: each item should be an array such that [String: hex color code, Float: width in decimal, String: label]
+// Inputs:
+// -- colors: Array, list of hex codes or HTML names for colors
+// -- values: Array, list of values for the bar chart (either ints or decimals that add to 1)
+// -- labels: Array, list of string labels for the bar chart
+// -- convert: Boolean, does the values array need to be converted to decimals?
 // Output String: HTML
 // Example input: 
 // [["maroon", 0.6, "Down"], ["peru", 0.35, "Partial"],  ["grey", 0, "Unknown"],  ["seagreen", 0.05, "Up"]]
-function makeBarChart(colorArray) {
+function makeBarChart(colors, values, labels, convert) {
+
+	// convert the values to decimals if necessary 
+	if (convert) {
+			values = convertArrayToDecimal(values)
+	    Console(values)
+	}
+	
   var barHtml = ''
   var labelHtml = ''
 
@@ -42,11 +65,11 @@ function makeBarChart(colorArray) {
   
   // loop through each item in the color array
   // if the value is too small to be meaningful, skip that chunk and that label
-  for(var i in colorArray) {
-    if (colorArray[i][1] > 0.01) {
-      var percent = colorArray[i][1] * 100 + '%'
-      barHtml += makeBarChunk(colorArray[i][0], percent);
-      labelHtml +=  makePatch(colorArray[i][0]) + percent + " " + colorArray[i][2] + " ";
+  for(var i in colors) {
+    if (values[i] > 0.01) {
+      var percent = Round(values[i], 2) * 100 + '%'
+      barHtml += makeBarChunk(colors[i], percent);
+      labelHtml +=  makePatch(colors[i]) + percent + " " + labels[i] + " ";
     }
   }
 
@@ -60,43 +83,16 @@ function makeBarChart(colorArray) {
 }
 ```
 
-### Example in the Arcade Playground
+## Examples
+
+### Bar Chart in a web map pop up 
 
 ```
-function convertArrayToDecimal(array) {
-	var decimalArray = []
-	var denominator = Sum(array)
-
-	for (var i in array) {
-    var decimal = array[i]/denominator
-		decimalArray[i] = decimal
-	}
-
-	return decimalArray
-}
-
-function createInputArray(colors, values, labels, convert) {
-	Console(colors)
-	if (convert) {
-		values = convertArrayToDecimal(values)
-    Console(values)
-	}
-
-	var inputArray = []
-
-	for (var i in colors) {
-		inputArray[i] = [colors[i], values[i], labels[i]]
-	}
-
-	return inputArray
-}
-
 var featureArray = [$feature.apples, $feature.Bananas, $feature.kiwis, $feature.oranges];
 var colorArray = ["maroon", "yellow", "green", "orange"];
 var labelArray = ["Apples", "Bananas", "Kiwis", "Oranges"];
 
-var inputArray = createInputArray(colorArray, featureArray, labelArray, True)
-var chart = makeBarChart(inputArray)
+var chart = makeBarChart(colorArray, featureArray, labelArray, True)
 
 return { 
 	type : 'text', 
