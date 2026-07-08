@@ -1,5 +1,7 @@
 # Making Bar Charts in ArcGIS Dashboards with Arcade
 
+![single bar chart example](popup/example_bar_chart.png)
+
 Generate lightweight horizontal bar charts using only **Arcade** and **HTML**. These charts work in ArcGIS Dashboards, web map popups, lists, tables, and anywhere Arcade expressions can return HTML.
 
 ## Overview
