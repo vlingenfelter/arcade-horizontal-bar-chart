@@ -105,7 +105,7 @@ return {
 ### Bar Charts in Dashboard Elements
 
 #### Bar Charts in Table Cells
-![Bar chart element in a table](popup/dashboard_table_example.pngg)
+![Bar chart element in a table](dashboard/dashboard_table_example.pngg)
 
 #### Bar Charts in Lists
-![Bar chart element in a list](popup/dashboard_list_example.pngg)
+![Bar chart element in a list](dashboard/dashboard_list_example.pngg)
