@@ -85,9 +85,9 @@ function makeBarChart(colors, values, labels, convert) {
 
 ## Examples
 
-### Bar Chart in a web map pop up 
+### Bar Chart in a Web Map Popup
 
-![Kiku](popup/popup_with_bar.png)
+![Bar chart popup in a web map](popup/popup_with_bar.png)
 
 ```
 var featureArray = [$feature.apples, $feature.Bananas, $feature.kiwis, $feature.oranges];
@@ -101,3 +101,11 @@ return {
 	text : chart 
 }
 ```
+
+### Bar Charts in Dashboard Elements
+
+#### Bar Charts in Table Cells
+![Bar chart element in a table](popup/dashboard_table_example.pngg)
+
+#### Bar Charts in Lists
+![Bar chart element in a list](popup/dashboard_list_example.pngg)
