@@ -87,6 +87,8 @@ function makeBarChart(colors, values, labels, convert) {
 
 ### Bar Chart in a web map pop up 
 
+![Kiku](popup/popup_with_bar.png)
+
 ```
 var featureArray = [$feature.apples, $feature.Bananas, $feature.kiwis, $feature.oranges];
 var colorArray = ["maroon", "yellow", "green", "orange"];
