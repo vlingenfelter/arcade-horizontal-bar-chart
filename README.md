@@ -1,111 +1,196 @@
 # Making Bar Charts in ArcGIS Dashboards with Arcade
 
-### Overview
+Generate lightweight horizontal bar charts using only **Arcade** and **HTML**. These charts work in ArcGIS Dashboards, web map popups, lists, tables, and anywhere Arcade expressions can return HTML.
 
+## Overview
 
-### How the code works
+Arcade doesn't include built-in charting capabilities, but you can create simple stacked bar charts by generating HTML tables with colored cells.
 
-```
-// This generates the little color patch for adding labels to a legend for the bar chart
-// String: Hex Code for color -> String: HTML
+This repository provides a reusable `makeBarChart()` function that:
+
+* Creates horizontal stacked bar charts from arrays of values.
+* Automatically converts whole numbers to percentages (optional).
+* Omits very small segments to keep charts readable.
+* Generates a matching legend beneath each chart.
+* Works anywhere Arcade supports HTML output.
+
+---
+
+## How It Works
+
+The chart is built from a few small helper functions.
+
+### `makePatch(color)`
+
+Creates a colored square used in the chart legend.
+
+**Input**
+
+* `color` *(String)* — HTML color name or hexadecimal color code.
+
+**Returns**
+
+* HTML string
+
+```javascript
 function makePatch(color) {
-  var div = '<span style="font-size:medium; color:' + color +';"> &#9632; </span>'
-  return div
-}
-
-
-// This generates the chunk of color for the bar in the bar chart
-// String: Hex color code, String: width (in percentage) -> String: HTML
-function makeBarChunk(color, width) {
-  var td = '<td style="background-color:' + color + '; width:' + width + '">&nbsp;</td>';
-  return td
-}
-
-// This is a helper function that can convert an array of whole numbers into decimals
-// Only necessary if your data is in whole numbers (which it likely is)
-// Array: array of ints -> Array: array of floats (decimals that sum to 1)
-function convertArrayToDecimal(array) {
-	var decimalArray = []
-	var denominator = Sum(array)
-
-	for (var i in array) {
-    var decimal = array[i]/denominator
-		decimalArray[i] = decimal
-	}
-
-	return decimalArray
-}
-
-
-// This generates the html table that makes the bar chart visual
-// Inputs:
-// -- colors: Array, list of hex codes or HTML names for colors
-// -- values: Array, list of values for the bar chart (either ints or decimals that add to 1)
-// -- labels: Array, list of string labels for the bar chart
-// -- convert: Boolean, does the values array need to be converted to decimals?
-// Output String: HTML
-// Example input: 
-// [["maroon", 0.6, "Down"], ["peru", 0.35, "Partial"],  ["grey", 0, "Unknown"],  ["seagreen", 0.05, "Up"]]
-function makeBarChart(colors, values, labels, convert) {
-
-	// convert the values to decimals if necessary 
-	if (convert) {
-			values = convertArrayToDecimal(values)
-	    Console(values)
-	}
-	
-  var barHtml = ''
-  var labelHtml = ''
-
-  // add the beginning of the table that becomes the bar chart
-  barHtml += '<table style="width:100%"><tbody><tr><td><table style="width:100%"><tbody><tr>';
-
-  // add the beginning of the HTML paragraph that becomes the labels
-  labelHtml = '<div style="text-align: center"><p style="display: inline-block; text-align: left;">';
-  
-  // loop through each item in the color array
-  // if the value is too small to be meaningful, skip that chunk and that label
-  for(var i in colors) {
-    if (values[i] > 0.01) {
-      var percent = Round(values[i], 2) * 100 + '%'
-      barHtml += makeBarChunk(colors[i], percent);
-      labelHtml +=  makePatch(colors[i]) + percent + " " + labels[i] + " ";
-    }
-  }
-
-  // add the end of the table that becomes the bar chart
-  barHtml += '<td style="font-size:0px" width="0%">&nbsp;</td></tr></tbody></table></td></tr></tbody></table>'
-
-  // add the end of the paragraph tag that becomes the labels:
-  labelHtml += "</p></div>"
-
-  return barHtml + labelHtml
+    var div = '<span style="font-size:medium; color:' + color + ';"> &#9632; </span>';
+    return div;
 }
 ```
 
-## Examples
+---
 
-### Bar Chart in a Web Map Popup
+### `makeBarChunk(color, width)`
+
+Creates a single colored segment of the stacked bar.
+
+**Inputs**
+
+| Parameter | Type   | Description                                 |
+| --------- | ------ | ------------------------------------------- |
+| `color`   | String | HTML color or hex code                      |
+| `width`   | String | Width as a percentage (for example `"35%"`) |
+
+**Returns**
+
+* HTML string
+
+```javascript
+function makeBarChunk(color, width) {
+    var td = '<td style="background-color:' + color + '; width:' + width + '">&nbsp;</td>';
+    return td;
+}
+```
+
+---
+
+### `convertArrayToDecimal(array)`
+
+Converts an array of counts into decimal proportions that sum to 1.
+
+For example:
+
+```text
+[50, 30, 20]
+```
+
+becomes
+
+```text
+[0.5, 0.3, 0.2]
+```
+
+Use this when your input values are counts instead of percentages.
+
+```javascript
+function convertArrayToDecimal(array) {
+    var decimalArray = [];
+    var denominator = Sum(array);
+
+    for (var i in array) {
+        decimalArray[i] = array[i] / denominator;
+    }
+
+    return decimalArray;
+}
+```
+
+---
+
+### `makeBarChart(colors, values, labels, convert)`
+
+Generates the complete bar chart and legend.
+
+If `convert` is `True`, the values are first converted into percentages using `convertArrayToDecimal()`.
+
+### Parameters
+
+| Parameter | Type    | Description                     |
+| --------- | ------- | ------------------------------- |
+| `colors`  | Array   | Color for each category         |
+| `values`  | Array   | Counts or decimal percentages   |
+| `labels`  | Array   | Label for each category         |
+| `convert` | Boolean | Convert counts into percentages |
+
+### Returns
+
+A string containing HTML that can be returned from an Arcade expression.
+
+Example input:
+
+```javascript
+colors = ["maroon", "peru", "grey", "seagreen"]
+
+values = [60, 35, 0, 5]
+
+labels = ["Down", "Partial", "Unknown", "Up"]
+```
+
+or, if already normalized:
+
+```javascript
+values = [0.60, 0.35, 0.00, 0.05]
+```
+
+The function automatically:
+
+* Converts counts to percentages (optional)
+* Skips segments smaller than 1%
+* Creates the stacked bar
+* Builds a matching legend
+
+---
+
+# Examples
+
+## Web Map Popup
+
+The following Arcade expression creates a stacked bar chart showing the distribution of fruit counts.
 
 ![Bar chart popup in a web map](popup/popup_with_bar.png)
 
-```
-var featureArray = [$feature.apples, $feature.Bananas, $feature.kiwis, $feature.oranges];
+```javascript
+var featureArray = [$feature.Apples, $feature.Bananas, $feature.Kiwis, $feature.Oranges ];
 var colorArray = ["maroon", "yellow", "green", "orange"];
-var labelArray = ["Apples", "Bananas", "Kiwis", "Oranges"];
+var labelArray = ["Apples", "Bananas", "Kiwis", "Oranges" ];
 
-var chart = makeBarChart(colorArray, featureArray, labelArray, True)
+var chart = makeBarChart(
+    colorArray,
+    featureArray,
+    labelArray,
+    True
+);
 
-return { 
-	type : 'text', 
-	text : chart 
-}
+return {
+    type: "text",
+    text: chart
+};
 ```
 
-### Bar Charts in Dashboard Elements
+---
 
-#### Bar Charts in Table Cells
+## ArcGIS Dashboards
+
+### Table Cells
+
+The chart can be returned from an Arcade expression and displayed directly inside dashboard table cells.
+
 ![Bar chart element in a table](dashboard/dashboard_table_example.png)
 
-#### Bar Charts in Lists
+---
+
+### Lists
+
+The same function also works inside Dashboard List elements.
+
 ![Bar chart element in a list](dashboard/dashboard_list_example.png)
+
+---
+
+## Notes
+
+* Values should either be counts or decimal percentages that sum to **1.0**.
+* Segments smaller than **1%** are hidden to improve readability.
+* Colors can be HTML color names (for example, `"red"` or `"seagreen"`) or hexadecimal values (for example, `"#2E8B57"`).
+* Since the output is pure HTML, it works anywhere Arcade supports HTML text output.
