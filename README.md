@@ -62,3 +62,44 @@ function makeBarChart(colorArray) {
 
 ### Example in the Arcade Playground
 
+```
+function convertArrayToDecimal(array) {
+	var decimalArray = []
+	var denominator = Sum(array)
+
+	for (var i in array) {
+    var decimal = array[i]/denominator
+		decimalArray[i] = decimal
+	}
+
+	return decimalArray
+}
+
+function createInputArray(colors, values, labels, convert) {
+	Console(colors)
+	if (convert) {
+		values = convertArrayToDecimal(values)
+    Console(values)
+	}
+
+	var inputArray = []
+
+	for (var i in colors) {
+		inputArray[i] = [colors[i], values[i], labels[i]]
+	}
+
+	return inputArray
+}
+
+var featureArray = [$feature.apples, $feature.Bananas, $feature.kiwis, $feature.oranges];
+var colorArray = ["maroon", "yellow", "green", "orange"];
+var labelArray = ["Apples", "Bananas", "Kiwis", "Oranges"];
+
+var inputArray = createInputArray(colorArray, featureArray, labelArray, True)
+var chart = makeBarChart(inputArray)
+
+return { 
+	type : 'text', 
+	text : chart 
+}
+```
