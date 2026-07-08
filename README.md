@@ -21,12 +21,13 @@ This repository provides a reusable `makeBarChart()` function that:
 ## How It Works
 
 The chart is built from a few small helper functions:
-* [`makePatch`](https://github.com/vlingenfelter/arcade-2026/tree/main#makepatchcolor)
-* [`makeBarChunk`](https://github.com/vlingenfelter/arcade-2026/tree/main#makebarchunkcolor-width)
-* [`convertArrayToDecimal`](https://github.com/vlingenfelter/arcade-2026/tree/main#convertarraytodecimalarray)
-* [`makeBarChart`](https://github.com/vlingenfelter/arcade-2026/tree/main#makebarchartcolors-values-labels-convert)
+* [`makePatch`](#makepatch)
+* [`makeBarChunk`](#makechunk)
+* [`convertArrayToDecimal`](#convert)
+* [`makeBarChart`](#makebar)
 
 ### `makePatch(color)`
+<a name="makepatch"></a>
 
 Creates a colored square used in the chart legend.
 
@@ -48,6 +49,7 @@ function makePatch(color) {
 ---
 
 ### `makeBarChunk(color, width)`
+<a name="makechunk"></a>
 
 Creates a single colored segment of the stacked bar.
 
@@ -72,6 +74,7 @@ function makeBarChunk(color, width) {
 ---
 
 ### `convertArrayToDecimal(array)`
+<a name="convert"></a>
 
 Converts an array of counts into decimal proportions that sum to 1. For example, `[50, 30, 20]` becomes `[0.5, 0.3, 0.2]`
 
@@ -93,6 +96,7 @@ function convertArrayToDecimal(array) {
 ---
 
 ### `makeBarChart(colors, values, labels, convert)`
+<a name="makebar"></a>
 
 Generates the complete bar chart and legend.
 
