@@ -1,0 +1,93 @@
+// This generates the little color patch for adding labels to a legend for the bar chart
+// String: Hex Code for color -> String: HTML
+function makePatch(color) {
+  var div = '<span style="font-size:medium; color:' + color +';"> &#9632; </span>'
+  return div
+}
+
+
+// This generates the chunk of color for the bar in the bar chart
+// String: Hex color code, String: width (in percentage) -> String: HTML
+function makeBarChunk(color, width) {
+  var td = '<td style="background-color:' + color + '; width:' + width + '">&nbsp;</td>';
+  return td
+}
+
+// This is a helper function that can convert an array of whole numbers into decimals
+// Only necessary if your data is in whole numbers (which it likely is)
+// Array: array of ints -> Array: array of floats (decimals that sum to 1)
+function convertArrayToDecimal(array) {
+	var decimalArray = []
+	var denominator = Sum(array)
+
+	for (var i in array) {
+    var decimal = array[i]/denominator
+		decimalArray[i] = decimal
+	}
+
+	return decimalArray
+}
+
+
+// This generates the html table that makes the bar chart visual
+// Inputs:
+// -- colors: Array, list of hex codes or HTML names for colors
+// -- values: Array, list of values for the bar chart (either ints or decimals that add to 1)
+// -- labels: Array, list of string labels for the bar chart
+// -- convert: Boolean, does the values array need to be converted to decimals?
+// Output String: HTML
+// Example input: 
+// [["maroon", 0.6, "Down"], ["peru", 0.35, "Partial"],  ["grey", 0, "Unknown"],  ["seagreen", 0.05, "Up"]]
+function makeBarChart(colors, values, labels, convert) {
+
+	// convert the values to decimals if necessary 
+	if (convert) {
+			values = convertArrayToDecimal(values)
+	    Console(values)
+	}
+	
+  var barHtml = ''
+  var labelHtml = ''
+
+  // add the beginning of the table that becomes the bar chart
+  barHtml += '<table style="width:100%"><tbody><tr><td><table style="width:100%"><tbody><tr>';
+
+  // add the beginning of the HTML paragraph that becomes the labels
+  labelHtml = '<div style="text-align: center; text-wrap: wrap;"><p style="display: inline-block; text-align: left;">';
+  
+  // loop through each item in the color array
+  // if the value is too small to be meaningful, skip that chunk and that label
+  for(var i in colors) {
+    if (values[i] > 0.01) {
+      var percent = Round(values[i], 2) * 100 + '%'
+      barHtml += makeBarChunk(colors[i], percent);
+      labelHtml +=  makePatch(colors[i]) + percent + " " + labels[i] + " ";
+    }
+  }
+
+  // add the end of the table that becomes the bar chart
+  barHtml += '<td style="font-size:0px" width="0%">&nbsp;</td></tr></tbody></table></td></tr></tbody></table>'
+
+  // add the end of the paragraph tag that becomes the labels:
+  labelHtml += "</p></div>"
+
+  return barHtml + labelHtml
+}
+
+var featureArray = [$datapoint.apples, $datapoint.oranges, $datapoint.Bananas, $datapoint.kiwis];
+var colorArray = ["maroon", "DarkOrange", "gold", "MediumSeaGreen"];
+var labelArray = ["Apples", "Oranges", "Bananas", "Kiwis"];
+
+var chart = makeBarChart(colorArray, featureArray, labelArray, True)
+
+
+return {
+  textColor: '',
+  backgroundColor: '',
+  separatorColor:'',
+  selectionColor: '',
+  selectionTextColor: '',
+  attributes: {
+    chart: chart,
+  }
+}
