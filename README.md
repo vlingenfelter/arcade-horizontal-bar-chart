@@ -161,6 +161,8 @@ function makeBarChart(colors, values, labels, convert) {
 
 All examples were created using a [demo feature layer](https://sfgov.maps.arcgis.com/home/item.html?id=a274afabf00046fda7756afc482fe1d0#overview). If you would like to recreate these examples, the feature layer is public. 
 
+There is also an [example ArcGIS Dashboard](https://sfgov.maps.arcgis.com/apps/dashboards/628fc37f0b494cb6ad03d6145bd261d8) available to look at. 
+
 ## Web Map Popup
 
 The following Arcade expression creates a stacked bar chart showing the distribution of fruit counts. 
