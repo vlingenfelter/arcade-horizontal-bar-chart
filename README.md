@@ -195,7 +195,7 @@ Example HTML output:
 
 ## Web Map Popup
 
-The following Arcade expression creates a stacked bar chart showing the distribution of fruit counts. 
+Say we have a layer that shows the locations of fruit stands in San Francisco. Each fruit stand sells apples, bananas, kiwis, and oranges. We want to have an easy way to show the stock of fruits at each stand, so we will use a horizontal bar chart. The following Arcade expression creates a stacked horizontal bar chart showing the distribution of fruits at a given fruit stand within a Web Map pop-up. 
 
 ![Bar chart popup in a web map](popup/popup_with_bar.png)
 
@@ -224,8 +224,7 @@ return {
 ## ArcGIS Dashboards
 
 ### Table Cells
-
-The same functions also work inside Dashboard Table elements, by going to the "Values" option and enabling "Advanced Formatting", and working in Arcade there. To get the horizontal bar charts to render in the table, you will need to add an extra value field that will be replaced with the bar chart. For this example, the extra value field I used is "Oranges".
+Say we want to our fruit stand web map to power an ArcGIS Dashboard, where we can see the distributions of fruits at all fruit stands at once. The same functions also work inside Dashboard Table elements, by going to the "Values" option and enabling "Advanced Formatting", and working in Arcade there. To get the horizontal bar charts to render in the table, you will need to add an extra value field that will be replaced with the bar chart. For this example, the extra value field I used is "Oranges".
 
 ![Bar chart element in a table](dashboard/dashboard_table_example.png)
 
