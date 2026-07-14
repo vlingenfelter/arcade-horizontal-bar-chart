@@ -200,7 +200,7 @@ The following Arcade expression creates a stacked bar chart showing the distribu
 ![Bar chart popup in a web map](popup/popup_with_bar.png)
 
 ```javascript
-\\ copy this after importing the helper functions
+// copy this after importing the helper functions
 
 var featureArray = [$feature.Apples, $feature.Bananas, $feature.Kiwis, $feature.Oranges ];
 var colorArray = ["maroon", "yellow", "green", "orange"];
@@ -230,7 +230,7 @@ The same functions also work inside Dashboard Table elements, by going to the "V
 ![Bar chart element in a table](dashboard/dashboard_table_example.png)
 
 ```javascript
-\\ copy this after importing the helper functions
+// copy this after importing the helper functions
 
 var featureArray = [$datapoint.apples, $datapoint.oranges, $datapoint.Bananas, $datapoint.kiwis];
 var colorArray = ["maroon", "DarkOrange", "gold", "MediumSeaGreen"];
@@ -274,7 +274,7 @@ The same functions also work inside Dashboard List elements, by going to the "Li
 ![Bar chart element in a list](dashboard/dashboard_list_example.png)
 
 ```javascript
-\\ copy this after importing the helper functions
+// copy this after importing the helper functions
 
 var featureArray = [$datapoint.apples, $datapoint.oranges, $datapoint.Bananas, $datapoint.kiwis];
 var colorArray = ["maroon", "DarkOrange", "gold", "MediumSeaGreen"];
