@@ -1,4 +1,4 @@
-# Making Bar Charts in ArcGIS Dashboards with Arcade
+# Making Bar Charts in ArcGIS Products with Arcade
 
 ![single bar chart example](popup/example_bar_chart.png)
 
@@ -6,7 +6,7 @@ Generate lightweight horizontal bar charts using only **Arcade** and **HTML**. T
 
 ## Overview
 
-Arcade doesn't include built-in charting capabilities, but you can create simple stacked bar charts by generating HTML tables with colored cells.
+Arcade doesn't include built-in charting libraries, but you can create simple horizontally stacked bar charts by generating HTML tables with colored cells based on data within your own feature layers. 
 
 This repository provides a reusable `makeBarChart()` function that:
 
@@ -15,6 +15,10 @@ This repository provides a reusable `makeBarChart()` function that:
 * Omits very small segments to keep charts readable.
 * Generates a matching legend beneath each chart.
 * Works anywhere Arcade supports HTML output.
+
+This includes examples where horizontal bar charts are embedded in:
+* Popups for ArcGIS Online Web Maps
+* ArcGIS Dashboard table and list widgets
 
 ---
 
